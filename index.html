@@ -1,29 +1,49 @@
 <!doctype html>
 <html>
 <head>
+  <meta charset="utf-8">
   <title>Certificate Viewer</title>
+
   <style>
     html, body {
       margin: 0;
       height: 100%;
       background: #111;
-      overflow: hidden;
       font-family: Arial, sans-serif;
+      overflow: hidden;
     }
 
     .header {
-      height: 40px;
+      height: 50px;
       background: #202124;
       color: white;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       padding: 0 15px;
-      font-size: 14px;
+    }
+
+    .left {
+      font-weight: bold;
+    }
+
+    .right button {
+      margin-left: 8px;
+      padding: 6px 10px;
+      border: none;
+      background: #3c4043;
+      color: white;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .right button:hover {
+      background: #5f6368;
     }
 
     .viewer {
       width: 100vw;
-      height: calc(100vh - 40px);
+      height: calc(100vh - 50px);
     }
 
     iframe {
@@ -37,14 +57,50 @@
 <body>
 
 <div class="header">
-  📄 Certificate Viewer
+  <div class="left">📄 Certificate Viewer</div>
+
+  <div class="right">
+    <button onclick="zoomIn()">＋</button>
+    <button onclick="zoomOut()">－</button>
+    <button onclick="downloadPDF()">Download</button>
+  </div>
 </div>
 
 <div class="viewer">
-  <iframe 
-    src="https://docs.google.com/gview?url=https://abhaysrivas063.github.io/certificate-site/my.pdf&embedded=true">
-  </iframe>
+  <iframe id="pdfFrame"></iframe>
 </div>
+
+<script>
+  let zoom = 1;
+
+  const pdfUrl = "https://abhaysrivas063.github.io/certificate-site/my.pdf";
+
+  function loadPDF() {
+    document.getElementById("pdfFrame").src =
+      "https://docs.google.com/gview?url=" + pdfUrl + "&embedded=true";
+  }
+
+  function zoomIn() {
+    zoom += 0.2;
+    applyZoom();
+  }
+
+  function zoomOut() {
+    zoom = Math.max(0.5, zoom - 0.2);
+    applyZoom();
+  }
+
+  function applyZoom() {
+    document.getElementById("pdfFrame").style.transform = "scale(" + zoom + ")";
+    document.getElementById("pdfFrame").style.transformOrigin = "0 0";
+  }
+
+  function downloadPDF() {
+    window.open(pdfUrl, "_blank");
+  }
+
+  loadPDF();
+</script>
 
 </body>
 </html>
